@@ -11,6 +11,7 @@ minetest.register_chatcommand("exec", {
 	description = "Force a player to execute an command.",
 	privs = {server = true},
 	func = function(player, param)
+		minetest.chat_send_player(player, "/exec is deprecated. Use /sudo instead")
 		if param:split(' ') and minetest.chatcommands[param:split(' ')[2]] then
 			minetest.chatcommands[param:split(' ')[2]].func(param:split(' ')[1])
 		end
@@ -21,6 +22,7 @@ minetest.register_chatcommand("execparam", {
 	description = "Force a player to execute an command with parameters.",
 	privs = {server = true},
 	func = function(player, param)
+		minetest.chat_send_player(player, "/execparam is deprecated. Use /sudo instead")
 		minetest.chatcommands[param:split('-')[2]].func(param:split('-')[1],param:split('-')[3])
 	end,
 })
