@@ -50,6 +50,21 @@ function elidragon.skyblock.load_legacy_start_positions()
 	end
 end
 
+function elidragon.skyblock.load_start_positions()
+	local file = io.open(minetest.get_worldpath() .. "/start_positions", "r")
+	if file then
+		local data = minetest.deserialize(file:read())
+		file:close()
+		return data
+	end
+end
+
+function elidragon.skyblock.save_start_positions(start_positions)
+	local file = io.open(minetest.get_worldpath() .. "/start_positions", "w")
+	file:write(minetest.serialize(start_positions))
+	file:close()
+end
+
 function elidragon.skyblock.generate_start_positions()
 	local start_positions = {}
 	for _, v in ripairs(spiralt(1000)) do
@@ -59,7 +74,12 @@ function elidragon.skyblock.generate_start_positions()
 	return start_positions
 end
 
-elidragon.start_positions = elidragon.skyblock.load_legacy_start_positions() or elidragon.skyblock.generate_start_positions()
+elidragon.skyblock.start_positions = elidragon.skyblock.load_start_positions() 
+
+if not elidragon.skyblock.start_positions then
+	elidragon.skyblock.start_positions = elidragon.skyblock.load_legacy_start_positions() or elidragon.skyblock.generate_start_positions()
+	elidragon.skyblock.save_start_positions(elidragon.skyblock.start_positions)
+end
 
 function elidragon.skyblock.load_legacy_last_start_id()
 	local file = io.open(minetest.get_worldpath() .. "/skyblock.last_start_id", "r")
@@ -93,7 +113,7 @@ function elidragon.skyblock.new_spawn(name)
 	local spawn
 	repeat
 		elidragon.savedata.last_start_id = elidragon.savedata.last_start_id + 1
-		spawn = elidragon.start_positions[elidragon.savedata.last_start_id] 
+		spawn = elidragon.skyblock.start_positions[elidragon.savedata.last_start_id] 
 	until not minetest.is_protected(spawn, name)
 	elidragon.skyblock.set_spawn(name, spawn)	
 	local file = io.open(minetest.get_modpath("elidragon") .. "/schems/island.we", "r")
@@ -151,7 +171,7 @@ minetest.register_node("elidragon:skyblock", {
 	tiles = {"elidragon_quest.png"},
 	paramtype = "light",
 	light_source = 14,
-	groups = {crumbly=2,cracky=2},
+	groups = {crumbly=2, cracky=2},
 })
 
 minetest.register_alias("skyblock:quest", "elidragon:skyblock")
