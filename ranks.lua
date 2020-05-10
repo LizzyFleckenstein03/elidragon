@@ -70,7 +70,7 @@ end
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
     minetest.chat_send_all(elidragon.get_player_name(name, true) .. "has joined the Server.")
-    if irc.connected and irc.config.send_join_part then
+    if irc and irc.connected and irc.config.send_join_part then
         irc.say(elidragon.get_player_name(name) .. "has joined the Server.")
     end
     player:set_nametag_attributes({color = elidragon.get_rank(name).color})
@@ -79,14 +79,14 @@ end)
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
     minetest.chat_send_all(elidragon.get_player_name(name, true) .. "has left the Server.")
-    if irc.connected and irc.config.send_join_part then
+    if irc and irc.connected and irc.config.send_join_part then
         irc.say(elidragon.get_player_name(name) .. "has left the Server.")
     end
 end)
 
 minetest.register_on_chat_message(function(name, message)
     minetest.chat_send_all(elidragon.get_player_name(name, true, {"<", ">"}) .. message)
-    if irc.connected and irc.joined_players[name] then
+    if irc and irc.connected and irc.joined_players[name] then
         irc.say(elidragon.get_player_name(name, false, {"<", ">"}) .. message)
     end
     return true

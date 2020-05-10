@@ -53,9 +53,9 @@ end
 function elidragon.skyblock.load_start_positions()
 	local file = io.open(minetest.get_worldpath() .. "/start_positions", "r")
 	if file then
-		local data = minetest.deserialize(file:read())
+		local start_positions = minetest.deserialize(file:read())
 		file:close()
-		return data
+		return start_positions
 	end
 end
 
