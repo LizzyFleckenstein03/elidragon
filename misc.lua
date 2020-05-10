@@ -30,3 +30,5 @@ minetest.register_tool("elidragon:stick", {
 })
 
 minetest.register_alias("elidragon_server:god_stick", "elidragon:stick")
+
+minetest.register_alias_force("default:sign_yard", "default:sign_wood_yard")

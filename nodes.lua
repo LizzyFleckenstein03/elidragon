@@ -10,6 +10,7 @@ local nodes = {
     {"Olliy", "elidragon_olliy.png", "o"},
     {"Skyblock", "elidragon_skyblock.png", "sky"},
     {"Python", "default_rainforest_litter.png^elidragon_python.png", "py"},
+    {"Tux", "default_ice.png^elidragon_tux.png", "tux"},
 }
 for _, def in pairs(nodes) do
     local name = "elidragon:" .. string.lower(def[1]):gsub("+", "p"):gsub(" ", "_")

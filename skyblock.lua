@@ -83,14 +83,18 @@ function elidragon.skyblock.set_spawn(name, pos)
 end
 
 function elidragon.skyblock.spawn_player(player)
+	if not player then return end
 	local name = player:get_player_name()
 	local spawn = elidragon.skyblock.get_spawn(name) or elidragon.skyblock.new_spawn(name)
 	player:set_pos({x = spawn.x + 2, y = spawn.y + 2, z = spawn.z + 2})
 end
 
 function elidragon.skyblock.new_spawn(name)
-	elidragon.savedata.last_start_id = elidragon.savedata.last_start_id + 1
-	local spawn = elidragon.start_positions[elidragon.savedata.last_start_id] 
+	local spawn
+	repeat
+		elidragon.savedata.last_start_id = elidragon.savedata.last_start_id + 1
+		spawn = elidragon.start_positions[elidragon.savedata.last_start_id] 
+	until not minetest.is_protected(spawn, name)
 	elidragon.skyblock.set_spawn(name, spawn)	
 	local file = io.open(minetest.get_modpath("elidragon") .. "/schems/island.we", "r")
 	local schem = file:read()
@@ -167,15 +171,24 @@ end)
 
 -- remove legacy cloud layer
 
-minetest.register_abm({
-	name = "Remove Cloud Layer",
+minetest.register_lbm({
 	nodenames = {"default:cloud"},
-	interval = 1,
-	chance = 1,
+	name = "elidragon:remove_cloud_layer",
 	action = function(pos)
 		if pos.y == -10 then
 			minetest.set_node(pos, { name = "air"})
 		end
+	end
+})
+
+-- remove inventory from quest block
+
+minetest.register_lbm({
+	nodenames = {"elidragon:skyblock", "skyblock:quest"},
+	name = "elidragon:remove_inventory_from_quest_block",
+	action = function(pos)
+		minetest.get_meta(pos):set_string("formspec", "")
+		minetest.get_meta(pos):set_string("infotext", "")
 	end
 })
 
@@ -228,7 +241,7 @@ minetest.after(0, function()
 			if stree ~= tree then
 				items[#items + 1] = {
 					items = {stree .. "sapling"},
-					rarity = 250,
+					rarity = 1000,
 				}
 			end
 		end
