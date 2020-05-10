@@ -109,6 +109,7 @@ minetest.register_chatcommand("rank", {
 		if not rank_ref then 
             minetest.chat_send_player(name, "Invalid Rank: " .. rank)
         else
+			elidragon.savedata.ranks[target] = rank
 			local privs = {}
 			for _, r in pairs(elidragon.ranks) do
 				for k, v in pairs(r.privs) do
@@ -119,10 +120,10 @@ minetest.register_chatcommand("rank", {
 				end
 			end
 			minetest.set_player_privs(target, privs)
+			minetest.chat_send_all(target .. " is now a " .. minetest.colorize(rank_ref.color, rank_ref.name))
 			if target_ref then
 				target_ref:set_nametag_attributes({color = rank_ref.color})
 			end
-			minetest.chat_send_all(target .. " is now a " .. minetest.colorize(rank_ref.color, rank_ref.name))
 		end
 	end,
 })

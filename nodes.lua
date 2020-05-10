@@ -17,7 +17,7 @@ for _, def in pairs(nodes) do
     minetest.register_node(name, {
         description = def[1] .. " Block",
         tiles = {def[2]},
-        groups = {cracky = 3, stone = 1},
+		groups = {oddly_breakable_by_hand = 1, choppy = 1},
         stack_max = 1,
     })
     if def[3] then
