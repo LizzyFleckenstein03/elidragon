@@ -37,11 +37,16 @@ elidragon.ranks = {
 	},
 }
 
-if not elidragon.savedata.ranks then
+function elidragon.load_legacy_ranks()
 	local file = io.open(minetest.get_worldpath() .. "/ranks.json", "r")
-	local jsondata = file:read()
-	elidragon.savedata.ranks = minetest.parse_json(jsondata)
+	if file then
+		local ranks = minetest.parse_json(file:read())
+		file:close()
+		return ranks
+	end
 end
+
+elidragon.savedata.ranks = elidragon.savedata.ranks or elidragon.load_legacy_ranks() or {}
 
 function elidragon.get_rank(name)
     return elidragon.get_rank_by_name(elidragon.savedata.ranks[name] or "player")
@@ -97,10 +102,11 @@ minetest.register_chatcommand("rank", {
 	description = "Set a player's rank (admin|moderator|helper|builder|vip|player)",
 	privs = {privs = true},
 	func = function(name, param)
-		local target = param:split(' ')[1]
-		local player = minetest.get_player_by_name(name)
-		local rank = param:split(' ')[2]
-		if not elidragon.get_rank_by_name(rank) then 
+		local target = param:split(" ")[1]
+		local rank = param:split(" ")[2]
+		local target_ref = minetest.get_player_by_name(name)
+		local rank_ref = elidragon.get_rank_by_name(rank)
+		if not rank_ref then 
             minetest.chat_send_player(name, "Invalid Rank: " .. rank)
         else
 			local privs = {}
@@ -113,10 +119,10 @@ minetest.register_chatcommand("rank", {
 				end
 			end
 			minetest.set_player_privs(target, privs)
-			if player then
-				player:set_nametag_attributes({color = rank.color})
+			if target_ref then
+				target_ref:set_nametag_attributes({color = rank_ref.color})
 			end
-			minetest.chat_send_all(target .. " is now a " .. minetest.colorize(rank.color, rank.name))
+			minetest.chat_send_all(target .. " is now a " .. minetest.colorize(rank_ref.color, rank_ref.name))
 		end
 	end,
 })

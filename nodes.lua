@@ -8,7 +8,7 @@ local nodes = {
     {"Anton", "elidragon_anton.png", "a"},
     {"Max Glueckstaler", "elidragon_max_glueckstaler.png", "mg"},
     {"Olliy", "elidragon_olliy.png", "o"},
-    {"Skyblock", "elidragon_skyblock.png", "sky"},
+    {"Island", "elidragon_island.png", "sky"},
     {"Python", "default_rainforest_litter.png^elidragon_python.png", "py"},
     {"Tux", "default_ice.png^elidragon_tux.png", "tux"},
 }
@@ -20,5 +20,7 @@ for _, def in pairs(nodes) do
         groups = {cracky = 3, stone = 1},
         stack_max = 1,
     })
-    minetest.register_alias("elidragon_server:" .. def[3] .. "block", name)
+    if def[3] then
+		minetest.register_alias("elidragon_server:" .. def[3] .. "block", name)
+    end
 end
