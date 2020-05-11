@@ -107,7 +107,7 @@ minetest.register_chatcommand("rank", {
 		local target_ref = minetest.get_player_by_name(name)
 		local rank_ref = elidragon.get_rank_by_name(rank)
 		if not rank_ref then 
-            minetest.chat_send_player(name, "Invalid Rank: " .. rank)
+            minetest.chat_send_player(name, "Invalid Rank: " .. (rank or ""))
         else
 			elidragon.savedata.ranks[target] = rank
 			local privs = {}
