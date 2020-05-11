@@ -10,11 +10,9 @@ minetest.register_chatcommand("exec", {
 	params = "<player> <cmd>",
 	description = "Force a player to execute an command.",
 	privs = {server = true},
-	func = function(player, param)
-		minetest.chat_send_player(player, "/exec is deprecated. Use /sudo instead")
-		if param:split(' ') and minetest.chatcommands[param:split(' ')[2]] then
-			minetest.chatcommands[param:split(' ')[2]].func(param:split(' ')[1])
-		end
+	func = function(name, param)
+		minetest.chat_send_player(name, "/exec is deprecated. Use /sudo instead")
+		minetest.chatcommands["sudo"].func(name, param)
 	end,
 })
 minetest.register_chatcommand("execparam", {
@@ -22,8 +20,8 @@ minetest.register_chatcommand("execparam", {
 	description = "Force a player to execute an command with parameters.",
 	privs = {server = true},
 	func = function(player, param)
-		minetest.chat_send_player(player, "/execparam is deprecated. Use /sudo instead")
-		minetest.chatcommands[param:split('-')[2]].func(param:split('-')[1],param:split('-')[3])
+		minetest.chat_send_player(name, "/execparam is deprecated. Use /sudo instead")
+		minetest.chatcommands["sudo"].func(name, param:gsub("-", " "))
 	end,
 })
 minetest.register_chatcommand("message", {
@@ -92,6 +90,19 @@ minetest.register_chatcommand("sudo", {
 			end
 		else
 			minetest.chat_send_player(name, minetest.colorize("#FF0000", "Invalid Usage."))
+		end
+	end
+})
+
+minetest.register_chatcommand("getip", {
+	description = "Get the IP of a player",
+	params = "<player>",
+	privs = {server = true},
+	func = function(name, param)
+		if minetest.get_player_by_name(param) then
+			minetest.chat_send_player(name, "IP of " .. param .. ": " .. minetest.get_player_information(param).address)
+		else
+			minetest.chat_send_player(name, "Player is not online.")
 		end
 	end
 })
