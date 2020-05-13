@@ -67,7 +67,7 @@ function elidragon.limit_tick()
 		local name = player:get_player_name()
 		local rank = elidragon.get_rank(name).name
 		local privs = minetest.get_player_privs(name)
-		local vip = (elidragon.get_rank(name) == "vip")
+		local has_fly = elidragon.get_rank(name) == "vip" or elidragon.get_rank(name) == "builder"
         if rank ~= "admin" then
 			privs.tp_tpc = nil
 		end
@@ -83,7 +83,7 @@ function elidragon.limit_tick()
 		else
 			privs.home = true
 			privs.tp = true
-			if vip then
+			if has_fly then
 				privs.fly = true
 				privs.fast = true
 			end
