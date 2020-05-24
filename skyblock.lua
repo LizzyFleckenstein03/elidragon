@@ -227,14 +227,24 @@ minetest.after(0, function()
 			node = "default:stone_with_mese"
 		elseif math.random() < 0.01 then
 			node = "default:stone_with_gold"
+		elseif math.random() < 0.01 then
+			node = "technic:mineral_chromium"
+		elseif math.random() < 0.01 then
+			node = "technic:mineral_zinc"
+		elseif math.random() < 0.012 then
+			node = "technic:mineral_uranium"
 		elseif math.random() < 0.015 then
 			node = "default:stone_with_tin"
 		elseif math.random() < 0.02 then
 			node = "default:stone_with_copper"
+		elseif math.random() < 0.025 then
+			node = "technic:mineral_sulfur"
 		elseif math.random() < 0.033 then
 			node = "default:stone_with_iron"
 		elseif math.random() < 0.04 then
 			node = "moreores:mineral_silver"
+		elseif math.random() < 0.045 then
+			node = "technic:mineral_lead"
 		elseif math.random() < 0.05 then
 			node = "default:stone_with_coal"
 		else
@@ -301,8 +311,9 @@ minetest.register_craft({
 minetest.register_craft({
 	output = "default:desert_stone",
 	recipe = {
-		{"default:desert_sand", "default:desert_sand"},
-		{"default:desert_sand", "default:desert_sand"},
+		{"default:desert_sand", "default:desert_sand", "default:desert_sand"},
+		{"default:desert_sand", "default:desert_sand", "default:desert_sand"},
+		{"default:desert_sand", "default:desert_sand", "default:desert_sand"},
 	}
 })
 

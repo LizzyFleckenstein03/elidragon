@@ -45,7 +45,7 @@ elidragon.quests.list = {
 		action = "dig",
 		items = {"default:stone"},
 		reward = "default:chest_locked",
-		goal = "Stoneage",
+		goal = "Stone Age",
 	}
 }
 
