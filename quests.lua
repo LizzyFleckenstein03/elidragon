@@ -3,7 +3,7 @@ elidragon.quests = {}
 elidragon.quests.list = {
 	dig_dirt = {
 		job = "Dig Dirt",
-		desc = "You need ressources to build a stone generator!",
+		desc = "dig 10 x default:dirt or default:dirt_with_grass",
 		count = 10,
 		parents = {},
 		action = "dig",
@@ -12,7 +12,7 @@ elidragon.quests.list = {
 	},
 	get_wood = {
 		job = "Get Wood",
-		desc = "Wood is one of your basic resources",
+		desc = "dig 5 x default:wood",
 		count = 5,
 		parents = {},
 		action = "dig",
@@ -21,7 +21,7 @@ elidragon.quests.list = {
 	},
 	build_stonegen = {
 		job = "Build a stone generator",
-		desc = "Using lavacooling mechanisms to get access to cobblestone and ores! Be careful, you have only one lava bucket.",
+		desc = "place default:lava_source using a bucket",
 		count = 1,
 		parents = {"dig_dirt"},
 		action = "place_liquid",
@@ -30,7 +30,7 @@ elidragon.quests.list = {
 	},
 	craft_wood_pickaxe = {
 		job = "Craft a wooden pickaxe",
-		desc = "You need a pickaxe to get Cobblestone.",
+		desc = "craft default:pick_wood",
 		count = 1,
 		parents = {"get_wood"},
 		action = "craft",
@@ -39,7 +39,7 @@ elidragon.quests.list = {
 	},
 	dig_cobble = {
 		job = "Dig Stone",
-		desc = "Let's get some cobble!",
+		desc = "dig 10 x default:stone",
 		count = 10,
 		parents = {"craft_wood_pickaxe", "build_stonegen"},
 		action = "dig",
@@ -49,7 +49,7 @@ elidragon.quests.list = {
 	},
 	craft_stone_pick = {
 		job = "Craft a Stone Pickaxe",
-		desc = "Let's get a full stone toolset",
+		desc = "craft default:pick_stone",
 		count = 1,
 		parents = {"dig_cobble"},
 		action = "craft",
@@ -58,7 +58,7 @@ elidragon.quests.list = {
 	},
 	craft_stone_axe = {
 		job = "Craft a Stone Axe",
-		desc = "Let's get a full stone toolset",
+		desc = "craft default:axe_stone",
 		count = 1,
 		parents = {"craft_stone_pick"},
 		action = "craft",
@@ -67,7 +67,7 @@ elidragon.quests.list = {
 	},
 	craft_stone_shovel = {
 		job = "Craft a Stone Shovel",
-		desc = "Let's get a full stone toolset",
+		desc = "craft default:shovel_stone",
 		count = 1,
 		parents = {"dig_cobble"},
 		action = "craft",
@@ -76,7 +76,7 @@ elidragon.quests.list = {
 	},
 	craft_stone_sword = {
 		job = "Craft a stone sword",
-		desc = "Let's get a full stone toolset",
+		desc = "craft default:sword_stone",
 		count = 1,
 		parents = {"craft_stone_shovel", "craft_stone_axe"},
 		action = "craft",
@@ -86,7 +86,7 @@ elidragon.quests.list = {
 	},
 	craft_iron_pickaxe = {
 		job = "Make an Iron Pick",
-		desc = "Craft an iron pickaxe",
+		desc = "craft default:pick_steel",
 		count = 1,
 		parents = {"craft_stone_pick", "craft_furnace"},
 		action = "craft",
@@ -95,7 +95,7 @@ elidragon.quests.list = {
 	},
 	craft_dirt = {
 		job = "Craft some dirt!",
-		desc = "Expand your island",
+		desc = "craft 99 x default:dirt",
 		count = 99,
 		parents = {"craft_stone_sword"},
 		action = "craft",
@@ -104,7 +104,7 @@ elidragon.quests.list = {
 	},
 	craft_furnace = {
 		job = "Make a furnace",
-		desc = "Use 8 Cobble to get a furnace",
+		desc = "craft default:furnace",
 		count = 1,
 		parents = {"dig_cobble"},
 		action = "craft",
