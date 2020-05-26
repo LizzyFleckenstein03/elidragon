@@ -260,7 +260,7 @@ end)
 minetest.after(0, function()
 	minetest.register_alias("default:pine_leaves", "default:pine_needles")
 	minetest.register_alias("default:pine_bush_leaves", "default:pine_bush_needles")
-	local trees = {"default:", "default:jungle", "default:pine_", "default:acacia_", "default:aspen_", "default:bush_", "default:blueberry_bush_", "default:acacia_bush_", "default:pine_bush_",}
+	local trees = {"default:", "default:jungle", "default:pine_", "default:acacia_", "default:aspen_", "default:bush_", "default:blueberry_bush_", "default:acacia_bush_", "default:pine_bush_", "moretrees:apple_tree_", "moretrees:beech_", "moretrees:cedar_", "moretrees:date_palm_", "moretrees:fir_", "moretrees:oak_", "moretrees:palm_", "moretrees:poplar_", "moretrees:sequoia_", "moretrees:spruce_", "moretrees:willow_", }
 	for _, tree in pairs(trees) do
 		local items = {}
 		items[#items + 1] = {
@@ -278,6 +278,7 @@ minetest.after(0, function()
 		items[#items + 1] = {
 			items = {tree .. "leaves"},
 		}
+		print(tree)
 		minetest.registered_nodes[tree .. "leaves"].drop = {max_items = 1, items = items}
 	end
 end)
