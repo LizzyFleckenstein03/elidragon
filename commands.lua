@@ -72,10 +72,9 @@ minetest.register_chatcommand("sudo", {
 	func = function(name, param)
 		local target = param:split(" ")[1]
 		local command = param:split(" ")[2]
-		local arguments
 		local argumentsdisp
 		local cmddef = minetest.chatcommands
-		_, _, arguments = string.match(param, "([^ ]+) ([^ ]+) (.+)")
+		local _, _, arguments = string.match(param, "([^ ]+) ([^ ]+) (.+)")
 		if not arguments then arguments = "" end
 		if target and command then
 			if cmddef[command] then

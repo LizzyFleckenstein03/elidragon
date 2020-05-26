@@ -195,6 +195,7 @@ minetest.register_on_joinplayer(function(player)
 	elidragon.savedata.quests[name] = elidragon.savedata.quests[name] or {}
 	elidragon.quests.active[name] = {}
 	elidragon.quests.update(name)
+	quests.show_hud(name, true)
 end)
 
 -- callbacks

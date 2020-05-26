@@ -278,7 +278,6 @@ minetest.after(0, function()
 		items[#items + 1] = {
 			items = {tree .. "leaves"},
 		}
-		print(tree)
 		minetest.registered_nodes[tree .. "leaves"].drop = {max_items = 1, items = items}
 	end
 end)
