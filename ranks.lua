@@ -108,12 +108,12 @@ minetest.register_chatcommand("rank", {
 	description = "Set a player's rank (admin|moderator|helper|builder|vip|player)",
 	privs = {privs = true},
 	func = function(name, param)
-		local target = param:split(" ")[1]
-		local rank = param:split(" ")[2]
-		local target_ref = minetest.get_player_by_name(name)
+		local target = param:split(" ")[1] or ""
+		local rank = param:split(" ")[2] or ""
+		local target_ref = minetest.get_player_by_name(target)
 		local rank_ref = elidragon.get_rank_by_name(rank)
 		if not rank_ref then 
-            minetest.chat_send_player(name, "Invalid Rank: " .. (rank or ""))
+            minetest.chat_send_player(name, "Invalid Rank: " .. rank)
         else
 			elidragon.savedata.ranks[target] = rank
 			local privs = {}
