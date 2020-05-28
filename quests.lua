@@ -201,14 +201,17 @@ end)
 -- callbacks
 
 minetest.register_on_craft(function(itemstack, player, old_craft_grid, craft_inv)
+	if not player then return end
 	elidragon.quests.event(player:get_player_name(), "craft", itemstack)
 end)
 
 minetest.register_on_dignode(function(pos, oldnode, player)
+	if not player then return end
 	elidragon.quests.event(player:get_player_name(), "dig", ItemStack(oldnode.name))
 end)
 
 minetest.register_on_placenode(function(pos, newnode, player, oldnode, itemstack, pointed_thing)
+	if not player then return end
 	elidragon.quests.event(player:get_player_name(), "place", ItemStack(newnode.name))
 end)
 
