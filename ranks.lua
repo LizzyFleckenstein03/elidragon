@@ -30,8 +30,14 @@ elidragon.ranks = {
 		tag = "[MODERATOR]",
 	},
 	{
-		name = "admin",
+		name = "developer",
 		privs = {server = true, privs = true},
+		color = "#900A00",
+		tag = "[DEV]",
+	},
+	{
+		name = "admin",
+		privs = {},
 		color = "#FF2D8D",
 		tag = "[ADMIN]",
 	},
