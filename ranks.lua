@@ -13,19 +13,19 @@ elidragon.ranks = {
 	},
 	{
 		name = "builder",
-		privs = {creative = true, worldedit = true, areas = true},
+		privs = {creative = true, areas = true},
 		color = "#EE6E00",
 		tag = "[BUILDER]",
 	},
 	{
 		name = "helper",
-		privs = {kick = true, noclip = true, settime = true, give = true, teleport = true},
+		privs = {kick = true, noclip = true, settime = true, give = true, teleport = true, watch = true},
 		color = "#EBEE00",
 		tag = "[HELPER]",
 	},
 	{
 		name = "moderator",
-		privs = {ban = true, bring = true, invhack = true, vanish = true, protection_bypass = true},
+		privs = {ban = true, bring = true, invhack = true, vanish = true, protection_bypass = true, worldedit = true},
 		color = "#001FFF",
 		tag = "[MODERATOR]",
 	},
