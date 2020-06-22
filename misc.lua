@@ -1,3 +1,11 @@
+elidragon.hud_info = {
+	{0x3BDE1C, "ELIDRAGON Skyblock"},
+	{0x334FFF, "Discord: discord.gg/F5ABpPE"},
+	{0xF1E81C, "IRC: #elidragon-skyblocks (irc.edgy1.net)"},
+	{0xF500AC, "Donations <3: elidragon.com/donate"},
+	{0xE20019, "You can use /hub /shop and /island"},
+}
+
 minetest.register_on_newplayer(function(player)
 	minetest.after(0.1, function()
 		minetest.chat_send_all(minetest.colorize("#00D600", player:get_player_name() .. " has joined the Server for the first Time! Welcome!"))
@@ -5,15 +13,19 @@ minetest.register_on_newplayer(function(player)
 end)
 
 minetest.register_on_joinplayer(function(player)
-    minetest.chat_send_player(player:get_player_name(), 
-        minetest.colorize("#D6CD00", " ELIDRAGON") .. "\n" ..
-        minetest.colorize("#6076FF"," Join our discord Server (discord.gg/vkrmHZc) or our IRC channel (#elidragon-skyblocks on irc.edgy1.net)") .. "\n" ..
-        minetest.colorize("#E27900", " Go to hub using /hub") .. "\n" ..
-        minetest.colorize("#00F0FF", " Use /island to teleport to your island") .. "\n" ..
-        minetest.colorize("#83FF00", " NEWS: ") .. minetest.colorize("#FFFFFF", elidragon.savedata.news or "No current News")
-	)
+	for i, elem in pairs(elidragon.hud_info) do
+		player:hud_add({
+			hud_elem_type = "text",
+			position = {x = 1, y = 0},
+			offset = {x = -300, y = i * 18 + 5},
+			text = elem[2],
+			alignment = {x = 1, y = -1},
+			scale = {x = 100, y = 100},
+			number = elem[1]
+		})
+	end
 end)
- 
+
 minetest.register_tool("elidragon:stick", {
     description = "God Stick",
     inventory_image = "default_stick.png",
