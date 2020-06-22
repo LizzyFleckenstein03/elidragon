@@ -9,17 +9,17 @@ controls.register_on_press(function(player, key)
 			local ping = math.max(1, math.ceil(4 - minetest.get_player_information(n).avg_rtt * 4))
 			list[#list + 1] = player:hud_add({
 				hud_elem_type = "text",
-				position = {x = 1, y = 0},
-				offset = {x = -50, y = 5 + (i - 1) * 18},
+				position = {x = 0.5, y = 0},
+				offset = {x = 20, y = 53 + (i - 1) * 18},
 				text = n,
-				alignment = {x = -1, y = 1},
+				alignment = {x = 1, y = 1},
 				scale = {x = 100, y = 100},
 				number = tonumber(elidragon.get_rank(n).color:gsub("#", ""), 16),
 			})
 			list[#list + 1] = player:hud_add({
 				hud_elem_type = "image",
-				position = {x = 1, y = 0},
-				offset = {x = -5, y = (i - 1) * 18},
+				position = {x = 0.5, y = 0},
+				offset = {x = 0, y = 50 + (i - 1) * 18},
 				text = "server_ping_" .. ping .. ".png",
 				alignment = {x = -1, y = 1},
 				scale = {x = 1.5, y = 1.5},
