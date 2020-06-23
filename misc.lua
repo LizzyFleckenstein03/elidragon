@@ -3,7 +3,7 @@ elidragon.hud_info = {
 	{0x334FFF, "Discord: discord.gg/F5ABpPE"},
 	{0xF1E81C, "IRC: #elidragon-skyblocks (irc.edgy1.net)"},
 	{0xF500AC, "Donations <3: elidragon.com/donate"},
-	{0xE20019, "You can use /hub /shop and /island"},
+	{0xE20019, "You can use /hub /shop /pvp and /island"},
 }
 
 minetest.register_on_newplayer(function(player)

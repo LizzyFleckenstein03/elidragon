@@ -10,6 +10,11 @@ elidragon.warps = {
         pos = {x = 10071, y = 10003, z = 9951},
     },
     {
+		name = "pvp",
+		desc = "Pvp Area",
+		pos = {x = 20025, y = 1003, z = 1025},
+    },
+    {
         name = "spawn",
         desc = "Spawn",
         pos = {x = -21, y = 10202.5, z = -5},
