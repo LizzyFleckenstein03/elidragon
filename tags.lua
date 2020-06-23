@@ -5,7 +5,7 @@ function elidragon.get_area_with_tag(name, tag)
 	local player = minetest.get_player_by_name(name)
 	for _, player_area in pairs(areas:getAreasAtPos(player:get_pos())) do
 		for _, marked_area in pairs(elidragon.savedata.areas) do
-			if player_area.name == marked_area.name and marked_area.tag == tag and elidragon.get_rank(player_area.owner).name == "admin" then
+			if player_area.name == marked_area.name and marked_area.tag == tag and minetest.check_player_privs(player_area.owner, {server = true}) then
 				return marked_area
 			end
 		end
@@ -67,7 +67,7 @@ function elidragon.limit_tick()
 		local name = player:get_player_name()
 		local rank = elidragon.get_rank(name).name
 		local privs = minetest.get_player_privs(name)
-		local has_fly = elidragon.get_rank(name) == "vip" or elidragon.get_rank(name) == "builder"
+		local has_fly = rank ~= "player"
         if rank ~= "admin" then
 			privs.tp_tpc = nil
 		end
@@ -75,7 +75,7 @@ function elidragon.limit_tick()
         if teleport_area then
 			elidragon.teleport(name, teleport_area.param)
         end
-		if elidragon.get_area_with_tag(name, "movement") and rank ~= "admin" and rank ~= "moderator" and rank ~= "helper" then
+		if elidragon.get_area_with_tag(name, "movement") and rank ~= "admin" and rank ~= "moderator" and rank ~= "dev" and rank ~= "helper" then
 			privs.fly = nil
 			privs.fast = nil
             privs.home = nil
