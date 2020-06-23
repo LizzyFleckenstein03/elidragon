@@ -108,13 +108,6 @@ minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, 
 		return true
 	end
 end)
-minetest.register_on_punchplayer(function(player, hitter, time_from_last_punch, tool_capabilities, dir, damage)
-	if elidragon.get_area_with_tag(player:get_player_name(), "pvp") then
-		if player:get_hp() - damage < 0 and player:get_hp() <= 0 then
-            minetest.chat_send_all(minetest.colorize("#D3FF2A", hitter:get_player_name() .. " has killed " .. player:get_player_name() .. " in the PvP area!"))
-        end
-	end
-end)
 minetest.register_on_player_hpchange(function(player, hp_change)
     local name = player:get_player_name()
 	if elidragon.get_area_with_tag(name, "no_damage") and hp_change < 0 then

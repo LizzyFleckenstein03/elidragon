@@ -1,6 +1,6 @@
 elidragon = {}
 
-local modules = {"functions", "nodes", "commands", "ranks", "tags", "warps", "misc", "birthday", "skyblock", "playerlist", "quests"}
+local modules = {"functions", "nodes", "commands", "ranks", "tags", "warps", "misc", "birthday", "skyblock", "playerlist", "quests", "pvp"}
 
 local modpath = minetest.get_modpath("elidragon")
 
