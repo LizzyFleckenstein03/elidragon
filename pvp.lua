@@ -48,16 +48,27 @@ function elidragon.get_xp(player)
 end 
 
 minetest.register_on_dieplayer(function(player, reason)
-	if reason.type == "punch" then
-		local killer = reason.object
-		if killer and killer:is_player() and elidragon.get_area_with_tag(killer:get_player_name(), "pvp") then
-			minetest.chat_send_all(minetest.colorize("#D3FF2A", killer:get_player_name() .. " has killed " .. player:get_player_name() .. " in the PvP area!"))
-			local earned_xp = math.floor(5 + math.sqrt(elidragon.get_xp(player)))
-			elidragon.add_xp(killer, earned_xp)
-			minetest.chat_send_player(killer:get_player_name(), C("#00F5FF") .. "You earned " .. C("#C000AC") .. earned_xp .. C("#00F5FF") .. " XP. Use /xp to view your total score." .. C("#FFFFFF")) 
+	local object = reason.object
+	if not object then return end
+	local killer
+	if object:is_player() then
+		killer = object
+	else
+		local object_name = object:get_luaentity().name
+		if object_name == "bow:arrow" then
+			local owner =  minetest.get_player_by_name(object:get_luaentity().owner or "")
+			if owner and owner:is_player() then
+				killer = owner
+			end
 		end
 	end
-end) 
+	if killer and elidragon.get_area_with_tag(killer:get_player_name(), "pvp") then
+		minetest.chat_send_all(minetest.colorize("#D3FF2A", killer:get_player_name() .. " has killed " .. player:get_player_name() .. " in the PvP area!"))
+		local earned_xp = math.floor(5 + math.sqrt(elidragon.get_xp(player)))
+		elidragon.add_xp(killer, earned_xp)
+		minetest.chat_send_player(killer:get_player_name(), C("#00F5FF") .. "You earned " .. C("#C000AC") .. earned_xp .. C("#00F5FF") .. " XP. Use /xp to view your total score." .. C("#FFFFFF")) 
+	end
+end)
 
 minetest.register_on_joinplayer(elidragon.check_for_highscore)
 
