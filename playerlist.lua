@@ -14,7 +14,7 @@ controls.register_on_press(function(player, key)
 				text = n,
 				alignment = {x = 1, y = 1},
 				scale = {x = 100, y = 100},
-				number = tonumber(elidragon.get_rank(n).color:gsub("#", ""), 16),
+				number = tonumber(elidragon.get_rank(p).color:gsub("#", ""), 16),
 			})
 			list[#list + 1] = player:hud_add({
 				hud_elem_type = "image",
@@ -29,8 +29,9 @@ controls.register_on_press(function(player, key)
 		elidragon.playerlist[name] = list
 	end
 end)
+
 controls.register_on_release(function(player, key)
-	if key == "sneak" then
+	if key == "sneak" and player then
 		for _, id in pairs(elidragon.playerlist[player:get_player_name()]) do
 			player:hud_remove(id)
 		end

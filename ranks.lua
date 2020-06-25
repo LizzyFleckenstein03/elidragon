@@ -54,8 +54,9 @@ end
 
 elidragon.savedata.ranks = elidragon.savedata.ranks or elidragon.load_legacy_ranks() or {}
 
-function elidragon.get_rank(name)
-    return elidragon.get_rank_by_name(elidragon.savedata.ranks[name] or "player")
+function elidragon.get_rank(player)
+    local rank = player:get_meta():get("elidragon:rank") or "player"
+    return elidragon.get_rank_by_name(rank)
 end
 
 function elidragon.get_rank_by_name(rankname)
@@ -66,8 +67,8 @@ function elidragon.get_rank_by_name(rankname)
 	end
 end
 
-function elidragon.get_player_name(name, color, brackets)
-    local rank = elidragon.get_rank(name)
+function elidragon.get_player_name(player, color, brackets)
+    local rank = elidragon.get_rank(player)
     local rank_tag = rank.tag
     if color then 
 		rank_tag = minetest.colorize(rank.color, rank_tag)
@@ -75,37 +76,47 @@ function elidragon.get_player_name(name, color, brackets)
 	if not brackets then 
 		brackets = {"",""}
 	end
-	return rank_tag .. brackets[1] .. name .. brackets[2] .. " "
+	return rank_tag .. brackets[1] .. player:get_player_name() .. brackets[2] .. " "
+end
+
+function elidragon.update_nametag(player)
+	player:set_nametag_attributes({color = elidragon.get_rank(player).color})
 end
 
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
-    minetest.chat_send_all(elidragon.get_player_name(name, true) .. "has joined the Server.")
+	local rank = elidragon.savedata.ranks[name]
+	if rank then
+		player:get_meta():set_string("elidragon:rank", rank)
+		elidragon.savedata.ranks[name] = nil
+	end
+    minetest.chat_send_all(elidragon.get_player_name(player, true) .. "has joined the Server.")
     if irc and irc.connected and irc.config.send_join_part then
-        irc.say(elidragon.get_player_name(name) .. "has joined the Server.")
+        irc.say(elidragon.get_player_name(player) .. "has joined the Server.")
     end
-    player:set_nametag_attributes({color = elidragon.get_rank(name).color})
+    elidragon.update_nametag(player)
 end)
 
 minetest.register_on_leaveplayer(function(player)
-	local name = player:get_player_name()
-    minetest.chat_send_all(elidragon.get_player_name(name, true) .. "has left the Server.")
+    minetest.chat_send_all(elidragon.get_player_name(player, true) .. "has left the Server.")
     if irc and irc.connected and irc.config.send_join_part then
-        irc.say(elidragon.get_player_name(name) .. "has left the Server.")
+        irc.say(elidragon.get_player_name(player) .. "has left the Server.")
     end
 end)
 
 minetest.register_on_chat_message(function(name, message)
-    minetest.chat_send_all(elidragon.get_player_name(name, true, {"<", ">"}) .. message)
+	local player = minetest.get_player_by_name(name)
+	if not player then return end
+    minetest.chat_send_all(elidragon.get_player_name(player, true, {"<", ">"}) .. message)
     if irc and irc.connected and irc.joined_players[name] then
-        irc.say(elidragon.get_player_name(name, false, {"<", ">"}) .. message)
+        irc.say(elidragon.get_player_name(player, false, {"<", ">"}) .. message)
     end
     return true
 end)
 
 minetest.register_chatcommand("rank", {
 	params = "<player> <rank>",
-	description = "Set a player's rank (admin|moderator|helper|builder|vip|player)",
+	description = "Set a player's rank (admin|developer|moderator|helper|builder|vip|player)",
 	privs = {privs = true},
 	func = function(name, param)
 		local target = param:split(" ")[1] or ""
@@ -113,9 +124,11 @@ minetest.register_chatcommand("rank", {
 		local target_ref = minetest.get_player_by_name(target)
 		local rank_ref = elidragon.get_rank_by_name(rank)
 		if not rank_ref then 
-            minetest.chat_send_player(name, "Invalid Rank: " .. rank)
+            return false, "Invalid Rank: " .. rank
+		elseif not target_ref then
+			return false, "Player not online"
         else
-			elidragon.savedata.ranks[target] = rank
+			target_ref:get_meta():set_string("elidragon:rank", rank)
 			local privs = {}
 			for _, r in pairs(elidragon.ranks) do
 				for k, v in pairs(r.privs) do
@@ -127,9 +140,7 @@ minetest.register_chatcommand("rank", {
 			end
 			minetest.set_player_privs(target, privs)
 			minetest.chat_send_all(target .. " is now a " .. minetest.colorize(rank_ref.color, rank_ref.name))
-			if target_ref then
-				target_ref:set_nametag_attributes({color = rank_ref.color})
-			end
+			elidragon.update_nametag(target_ref)
 		end
 	end,
 })

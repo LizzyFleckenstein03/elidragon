@@ -65,7 +65,7 @@ minetest.register_chatcommand("print_tags", {
 function elidragon.limit_tick()
     for _, player in pairs(minetest.get_connected_players()) do
 		local name = player:get_player_name()
-		local rank = elidragon.get_rank(name).name
+		local rank = elidragon.get_rank(player).name
 		local privs = minetest.get_player_privs(name)
 		local has_fly = rank ~= "player"
         if rank ~= "admin" then
