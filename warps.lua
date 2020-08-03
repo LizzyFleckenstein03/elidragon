@@ -20,6 +20,11 @@ elidragon.warps = {
         pos = {x = -21, y = 10202.5, z = -5},
         restricted = true
     },
+    {
+        name = "jump",
+        desc = "Jumping area",
+        pos = {x = 12286, y = 12347, z = 12556},
+    },
 } 
 for _, warp in pairs(elidragon.warps) do
     local desc = "Warp to " .. warp.desc
