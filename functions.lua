@@ -30,7 +30,6 @@ function elidragon.message(message)
     if not msg then
         return
     end
-    print(name, color, msg)
     msg = minetest.colorize(color, msg)
     if name then
         minetest.chat_send_player(name, msg)
