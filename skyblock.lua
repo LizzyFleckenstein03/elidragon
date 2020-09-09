@@ -144,26 +144,6 @@ end
 
 elidragon.savedata.spawns = elidragon.savedata.spawns or elidragon.skyblock.load_legacy_spawns() or {}
 
-
--- level
---[[
-minetest.register_chatcommand("level", {
-	description = "Get/set the current level of a player",
-	params = "<player> [<level>]",
-	func = function(name, param)
-		local target = param:split(" ")[1]
-		local level = tonumber(param:split(" ")[2])
-		if not level then
-			minetest.chat_send_player(name, target .. " is on level " .. elidragon.skyblock.get_level(target))
-		elseif minetest.check_player_privs(name, {server = true}) and elidragon.skyblock.set_level(target, level) then
-			minetest.chat_send_player(name, target .. " has been set to level " .. level)
-		else
-			minetest.chat_send_player(name, "Cannot change " .. target .. " to level " .. level)
-		end
-	end,
-})
-]]--
-
 -- node
 
 minetest.register_node("elidragon:skyblock", {
@@ -219,33 +199,33 @@ minetest.after(0, function()
 		local node
 		if oldnode.name == "default:lava_source" then
 			node = "default:obsidian"
-		elseif math.random() < 0.001 then
+		elseif math.random() < 0.0001 then
 			node = "moreores:mineral_mithril"
-		elseif math.random() < 0.003 then
+		elseif math.random() < 0.0003 then
 			node = "default:stone_with_diamond"
-		elseif math.random() < 0.005 then
+		elseif math.random() < 0.0005 then
 			node = "default:stone_with_mese"
-		elseif math.random() < 0.01 then
+		elseif math.random() < 0.001 then
 			node = "default:stone_with_gold"
-		elseif math.random() < 0.01 then
+		elseif math.random() < 0.001 then
 			node = "technic:mineral_chromium"
-		elseif math.random() < 0.01 then
+		elseif math.random() < 0.001 then
 			node = "technic:mineral_zinc"
-		elseif math.random() < 0.012 then
+		elseif math.random() < 0.0012 then
 			node = "technic:mineral_uranium"
-		elseif math.random() < 0.015 then
+		elseif math.random() < 0.0015 then
 			node = "default:stone_with_tin"
-		elseif math.random() < 0.02 then
+		elseif math.random() < 0.002 then
 			node = "default:stone_with_copper"
-		elseif math.random() < 0.025 then
+		elseif math.random() < 0.0025 then
 			node = "technic:mineral_sulfur"
-		elseif math.random() < 0.033 then
+		elseif math.random() < 0.0033 then
 			node = "default:stone_with_iron"
-		elseif math.random() < 0.04 then
+		elseif math.random() < 0.004 then
 			node = "moreores:mineral_silver"
-		elseif math.random() < 0.045 then
+		elseif math.random() < 0.0045 then
 			node = "technic:mineral_lead"
-		elseif math.random() < 0.05 then
+		elseif math.random() < 0.005 then
 			node = "default:stone_with_coal"
 		else
 			node = "default:stone"
@@ -271,7 +251,7 @@ minetest.after(0, function()
 			if stree ~= tree then
 				items[#items + 1] = {
 					items = {stree .. "sapling"},
-					rarity = 1000,
+					rarity = 10000,
 				}
 			end
 		end

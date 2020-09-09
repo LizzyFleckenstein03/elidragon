@@ -1,9 +1,25 @@
 elidragon.savedata.birthday = elidragon.savedata.birthday or {}
+
+function elidragon.set_birthday(player, birthday)
+	player:get_meta():set_string("elidragon:birthday", birthday)
+end
+
+function elidragon.get_birthday(player)
+	local name = player:get_player_name()
+	local birthday = player:get_meta():get_string("elidragon:birthday")
+	if birthday == "" then
+		birthday = elidragon.savedata.birthday[name]
+		if birthday then
+			elidragon.savedata.birthday[name] = nil
+			elidragon.set_birthday(player, birthday)
+		end
+	end
+	return birthday
+end
+
 function elidragon.flower_rain(name)
 	local player = minetest.get_player_by_name(name)
-	if not player then
-		return
-	end
+	if not player then return end
 	local pos = player:get_pos()
 	minetest.add_particlespawner({
 		amount = 50,
@@ -25,8 +41,7 @@ function elidragon.flower_rain(name)
 	minetest.after(0.5, function() elidragon.flower_rain(name) end)
 end
 minetest.register_on_joinplayer(function(player)
-	local name = player:get_player_name()
-	if elidragon.savedata.birthday[name] == os.date("%d/%m") then
+	if elidragon.get_birthday(player) == os.date("%d/%m") then
 		minetest.chat_send_all(minetest.colorize("#FF20FF", name .. " has joined the game. Today is their birthday!"))
 		elidragon.flower_rain(name)
 		player:hud_add({
@@ -44,7 +59,9 @@ minetest.register_chatcommand("birthday", {
 	description = "Set your birthday (e.g. 07/09 if your birthday is the seventh of september)",
 	param = "DD/MM",
 	func = function(name, param)
-		elidragon.savedata.birthday[name] = param
-		minetest.chat_send_player(name, "Birthday set to " .. param)
+		local player = minetest.get_player_by_name(name)
+		if not player then return false, "You need to be online to use this command." end
+		elidragon.set_birthday(player, param)
+		return true, "Birthday set to " .. param
 	end
 })
