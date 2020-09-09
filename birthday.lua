@@ -41,6 +41,7 @@ function elidragon.flower_rain(name)
 	minetest.after(0.5, function() elidragon.flower_rain(name) end)
 end
 minetest.register_on_joinplayer(function(player)
+	local name = player:get_player_name()
 	if elidragon.get_birthday(player) == os.date("%d/%m") then
 		minetest.chat_send_all(minetest.colorize("#FF20FF", name .. " has joined the game. Today is their birthday!"))
 		elidragon.flower_rain(name)
