@@ -106,7 +106,7 @@ end)
 
 minetest.register_on_chat_message(function(name, message)
 	local player = minetest.get_player_by_name(name)
-	if not player then return end
+	if not player or not minetest.check_player_privs(name, {shout = true}) then return end
     minetest.chat_send_all(elidragon.get_player_name(player, true, {"<", ">"}) .. message)
     if irc and irc.connected and irc.joined_players[name] then
         irc.say(elidragon.get_player_name(player, false, {"<", ">"}) .. message)
