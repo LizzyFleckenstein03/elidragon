@@ -134,7 +134,9 @@ minetest.register_chatcommand("rank", {
 			end
 			minetest.set_player_privs(target, privs)
 			minetest.chat_send_all(target .. " is now a " .. minetest.colorize(rank_ref.color, rank_ref.name))
-			elidragon.update_nametag(target_ref)
+			if target_ref then
+				elidragon.update_nametag(target_ref)
+			end
 		end
 	end,
 })
