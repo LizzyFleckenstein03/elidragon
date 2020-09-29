@@ -55,7 +55,8 @@ end
 elidragon.savedata.ranks = elidragon.savedata.ranks or elidragon.load_legacy_ranks() or {}
 
 function elidragon.get_rank(player)
-    local rank = elidragon.savedata.ranks[player:get_player_name()] or "player"
+    local rank = elidragon.savedata.ranks[player:get_player_name()]
+    if not rank or rank == "" then rank = "player" end
     return elidragon.get_rank_by_name(rank)
 end
 
@@ -80,7 +81,9 @@ function elidragon.get_player_name(player, color, brackets)
 end
 
 function elidragon.update_nametag(player)
-	player:set_nametag_attributes({color = elidragon.get_rank(player).color})
+	if player then
+		player:set_nametag_attributes({color = elidragon.get_rank(player).color})
+	end
 end
 
 minetest.register_on_joinplayer(function(player)
@@ -143,7 +146,7 @@ minetest.register_chatcommand("rank", {
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
 	local rank = player:get_meta():get_string("elidragon:rank")
-	if rank then
+	if rank and rank ~= "" then
 		elidragon.savedata.ranks[name] = rank
 		player:get_meta():set_string("elidragon:rank", "")
 	end
