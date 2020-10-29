@@ -95,11 +95,17 @@ elidragon.savedata.last_start_id = elidragon.savedata.last_start_id or elidragon
 -- spawns
 
 function elidragon.skyblock.get_spawn(name)
-	return elidragon.savedata.spawns[name]
+	local player = minetest.get_player_by_name(name)
+	if not player then return false end
+	local spawn = player:get_meta():get_string("elidragon.spawn")
+	if spawn == "" then spawn = nil end
+	return minetest.string_to_pos(spawn)
 end
 
 function elidragon.skyblock.set_spawn(name, pos)
-	elidragon.savedata.spawns[name] = pos
+	local player = minetest.get_player_by_name(name)
+	if not player then return false end
+	player:get_meta():set_string("elidragon.spawn", minetest.pos_to_string(pos) or "")
 end
 
 function elidragon.skyblock.spawn_player(player)
@@ -380,3 +386,12 @@ minetest.register_chatcommand("island", {
 		elidragon.skyblock.spawn_player(minetest.get_player_by_name(name))
 	end,
 })
+
+-- Move spawns to meta
+minetest.register_on_joinplayer(function(player)
+	local name = player:get_player_name()
+	if not elidragon.skyblock.get_spawn(name) and elidragon.savedata.spawns[name] then
+		elidragon.skyblock.set_spawn(name, elidragon.savedata.spawns[name])
+		elidragon.savedata.spawns[name] = nil
+	end
+end)
