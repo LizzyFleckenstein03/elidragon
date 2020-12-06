@@ -43,19 +43,9 @@ elidragon.ranks = {
 	},
 }
 
-function elidragon.load_legacy_ranks()
-	local file = io.open(minetest.get_worldpath() .. "/ranks.json", "r")
-	if file then
-		local ranks = minetest.parse_json(file:read())
-		file:close()
-		return ranks
-	end
-end
-
-elidragon.savedata.ranks = elidragon.savedata.ranks or elidragon.load_legacy_ranks() or {}
 
 function elidragon.get_rank(player)
-    local rank = elidragon.savedata.ranks[player:get_player_name()]
+    local rank = player:get_meta():get_string("elidragon:rank")
     if not rank or rank == "" then rank = "player" end
     return elidragon.get_rank_by_name(rank)
 end
@@ -81,14 +71,10 @@ function elidragon.get_player_name(player, color, brackets)
 end
 
 function elidragon.update_nametag(player)
-	if player then
-		player:set_nametag_attributes({color = elidragon.get_rank(player).color})
-	end
+	player:set_nametag_attributes({color = elidragon.get_rank(player).color})
 end
 
 minetest.register_on_joinplayer(function(player)
-	local name = player:get_player_name()
-	local rank = elidragon.savedata.ranks[name]
     minetest.chat_send_all(elidragon.get_player_name(player, true) .. "has joined the Server.")
     if irc and irc.connected and irc.config.send_join_part then
         irc.say(elidragon.get_player_name(player) .. "has joined the Server.")
@@ -124,8 +110,10 @@ minetest.register_chatcommand("rank", {
 		local rank_ref = elidragon.get_rank_by_name(rank)
 		if not rank_ref then 
             return false, "Invalid Rank: " .. rank
-        else
-			elidragon.savedata.ranks[target] = rank
+        elseif not target_ref then
+			return false, "Player not found"
+		else
+			target_ref:get_meta():set_string("elidragon:rank", rank)
 			local privs = {}
 			for _, r in pairs(elidragon.ranks) do
 				for k, v in pairs(r.privs) do
@@ -141,13 +129,3 @@ minetest.register_chatcommand("rank", {
 		end
 	end,
 })
-
--- Migrate old ranks
-minetest.register_on_joinplayer(function(player)
-	local name = player:get_player_name()
-	local rank = player:get_meta():get_string("elidragon:rank")
-	if rank and rank ~= "" then
-		elidragon.savedata.ranks[name] = rank
-		player:get_meta():set_string("elidragon:rank", "")
-	end
-end)

@@ -2,7 +2,7 @@ elidragon.hud_info = {
 	{0x3BDE1C, "ELIDRAGON Skyblock"},
 	{0x334FFF, "Discord: discord.gg/F5ABpPE"},
 	{0xF1E81C, "IRC: #elidragon-skyblocks (irc.edgy1.net)"},
-	{0xF500AC, "Donations <3: elidragon.com/donate"},
+	{0xF500AC, "Donations: elidragon.com/donate"},
 	{0xE20019, "You can use /hub /shop /pvp and /island"},
 }
 

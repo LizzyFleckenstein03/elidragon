@@ -1,11 +1,3 @@
-minetest.register_chatcommand("setnews", {
-	params = "<news>",
-	description = "Set news",
-	privs = {server = true},
-	func = function(player, param)
-		elidragon.savedata.news = param
-	end,
-})
 minetest.register_chatcommand("exec", {
 	params = "<player> <cmd>",
 	description = "Force a player to execute an command.",

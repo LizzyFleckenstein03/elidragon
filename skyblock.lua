@@ -32,24 +32,6 @@ end
 
 -- start positions
 
-function elidragon.skyblock.load_legacy_start_positions()
-	local file = io.open(minetest.get_worldpath() .. "/skyblock.start_positions", "r")
-	if file then
-		local start_positions = {}
-		while true do
-			local x = file:read("*n")
-			if x == nil then
-				break
-			end
-			local y = file:read("*n")
-			local z = file:read("*n")
-			table.insert(start_positions, {x = x, y = y, z = z})
-		end
-		file:close()
-		return start_positions
-	end
-end
-
 function elidragon.skyblock.load_start_positions()
 	local file = io.open(minetest.get_worldpath() .. "/start_positions", "r")
 	if file then
@@ -77,72 +59,42 @@ end
 elidragon.skyblock.start_positions = elidragon.skyblock.load_start_positions() 
 
 if not elidragon.skyblock.start_positions then
-	elidragon.skyblock.start_positions = elidragon.skyblock.load_legacy_start_positions() or elidragon.skyblock.generate_start_positions()
+	elidragon.skyblock.start_positions = elidragon.skyblock.generate_start_positions()
 	elidragon.skyblock.save_start_positions(elidragon.skyblock.start_positions)
 end
 
-function elidragon.skyblock.load_legacy_last_start_id()
-	local file = io.open(minetest.get_worldpath() .. "/skyblock.last_start_id", "r")
-	if file then
-		local last_start_id = tonumber(file:read())
-		file:close()
-		return last_start_id
-	end
-end
-
-elidragon.savedata.last_start_id = elidragon.savedata.last_start_id or elidragon.skyblock.load_legacy_last_start_id() or 0
+elidragon.savedata.last_start_id = elidragon.savedata.last_start_id or 0
 
 -- spawns
 
-function elidragon.skyblock.get_spawn(name)
-	return elidragon.savedata.spawns[name]
+function elidragon.skyblock.get_spawn(player)
+	return minetest.string_to_pos(player:get_meta():get_string("elidragon:spawn"))
 end
 
-function elidragon.skyblock.set_spawn(name, pos)
-	elidragon.savedata.spawns[name] = pos
+function elidragon.skyblock.set_spawn(player, pos)
+	player:get_meta():set_string("elidragon:spawn", minetest.pos_to_string(pos))
 end
 
 function elidragon.skyblock.spawn_player(player)
 	if not player then return end
-	local name = player:get_player_name()
-	local spawn = elidragon.skyblock.get_spawn(name) or elidragon.skyblock.new_spawn(name)
+	local spawn = elidragon.skyblock.get_spawn(player) or elidragon.skyblock.new_spawn(player)
 	player:set_pos({x = spawn.x + 2, y = spawn.y + 2, z = spawn.z + 2})
 end
 
-function elidragon.skyblock.new_spawn(name)
+function elidragon.skyblock.new_spawn(player)
+	local name = player:get_player_name()
 	local spawn
 	repeat
 		elidragon.savedata.last_start_id = elidragon.savedata.last_start_id + 1
 		spawn = elidragon.skyblock.start_positions[elidragon.savedata.last_start_id] 
 	until not minetest.is_protected(spawn, name)
-	elidragon.skyblock.set_spawn(name, spawn)	
+	elidragon.skyblock.set_spawn(player, spawn)	
 	local file = io.open(minetest.get_modpath("elidragon") .. "/schems/island.we", "r")
 	local schem = file:read()
 	file:close()
 	worldedit.deserialize(vector.add(spawn, {x = -3, y = -4, z = -3}), schem) 
 	return spawn
 end
-
-function elidragon.skyblock.load_legacy_spawns()
-    local file = io.open(minetest.get_worldpath() .. "/skyblock.spawn", "r")
-    if file then
-		local spawns = {}
-        while true do
-            local x = file:read("*n")
-            if x == nil then
-                break
-            end
-            local y = file:read("*n")
-            local z = file:read("*n")
-            local name = file:read("*l")
-            spawns[name:sub(2)] = {x = x, y = y, z = z}
-        end
-        file:close()
-        return spawns
-	end
-end
-
-elidragon.savedata.spawns = elidragon.savedata.spawns or elidragon.skyblock.load_legacy_spawns() or {}
 
 -- node
 
@@ -354,29 +306,12 @@ minetest.register_craft({
 	}
 })
 
--- commands
-
-minetest.register_chatcommand("set_skyblock_spawn", {
-    param = "<player> <x> <y> <z>",
-    desc = "Change the skyblocks spawn of a player",
-    privs = {server = true},
-    func = function(admin, param)
-        local name = param:split(" ")[1]
-        local x = tonumber(param:split(" ")[2])
-        local y = tonumber(param:split(" ")[3])
-        local z = tonumber(param:split(" ")[4])
-        if name and x and y and z then
-            elidragon.skyblock.set_spawn(name, {x = x, y = y, z = z})
-        else
-            minetest.chat_send_player(admin, "Invalid usage.")
-        end
-    end
-})
-
 minetest.register_chatcommand("island", {
 	params = "",
 	description = "Teleport to your Island",
 	func = function(name, param)
-		elidragon.skyblock.spawn_player(minetest.get_player_by_name(name))
+		local player = minetest.get_player_by_name(name)
+		if not player then return end
+		elidragon.skyblock.spawn_player(player)
 	end,
 })

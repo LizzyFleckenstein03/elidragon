@@ -113,8 +113,6 @@ elidragon.quests.list = {
 	},
 }
 
-elidragon.savedata.quests = elidragon.savedata.quests or {}
-
 elidragon.quests.active = {}
 
 -- functions
@@ -124,7 +122,8 @@ function elidragon.quests.complete(name, queststr)
 	local questdef = elidragon.quests.list[questname]
 	local player = minetest.get_player_by_name(name)
 	if not player then return end
-	elidragon.savedata.quests[name][questname] = true
+	local meta = player:get_meta()
+	meta:set_string(queststr, "true")
 	if questdef.goal then
 		minetest.chat_send_all(minetest.colorize("#84FFE3", name .. " has reached the goal ") .. minetest.colorize("#CF24FF", questdef.goal))
 		minetest.sound_play("elidragon_reach_goal")
@@ -136,14 +135,17 @@ function elidragon.quests.complete(name, queststr)
 end
 
 function elidragon.quests.update(name)
-	local completed_quests = elidragon.savedata.quests[name]
+	local player = minetest.get_player_by_name(name)
+	if not player then return end
+	local meta = player:get_meta()
 	local active_quests = elidragon.quests.active[name]
 	local unlock_delay = 2
-	for questname, questdef in pairs(elidragon.quests.list) do
-		if not completed_quests[questname] and not active_quests[questname] then
+	for questname, questdef in pairs(elidragon.quests.list) do	
+		local queststr = "elidragon:" .. questname
+		if not active_quests[questname] and not minetest.is_yes(meta:get_string(queststr)) then
 			local unlock = true
 			for _, parent in pairs(questdef.parents) do
-				if not completed_quests[parent] then
+				if not minetest.is_yes(meta:get_string("elidragon:" .. parent)) then
 					unlock = false
 					break
 				end
@@ -151,7 +153,7 @@ function elidragon.quests.update(name)
 			if unlock then
 				active_quests[questname] = true
 				minetest.after(unlock_delay, function()
-					quests.start_quest(name, "elidragon:" .. questname)
+					quests.start_quest(name, queststr)
 					minetest.sound_play("elidragon_new_quest", {to_player = name})
 				end)
 				unlock_delay = unlock_delay + 0.5
@@ -192,7 +194,6 @@ end
 
 minetest.register_on_joinplayer(function(player)
 	local name = player:get_player_name()
-	elidragon.savedata.quests[name] = elidragon.savedata.quests[name] or {}
 	elidragon.quests.active[name] = {}
 	elidragon.quests.update(name)
 	quests.show_hud(name, true)

@@ -1,20 +1,9 @@
-elidragon.savedata.birthday = elidragon.savedata.birthday or {}
-
 function elidragon.set_birthday(player, birthday)
 	player:get_meta():set_string("elidragon:birthday", birthday)
 end
 
 function elidragon.get_birthday(player)
-	local name = player:get_player_name()
-	local birthday = player:get_meta():get_string("elidragon:birthday")
-	if birthday == "" then
-		birthday = elidragon.savedata.birthday[name]
-		if birthday then
-			elidragon.savedata.birthday[name] = nil
-			elidragon.set_birthday(player, birthday)
-		end
-	end
-	return birthday
+	return player:get_meta():get_string("elidragon:birthday")
 end
 
 function elidragon.flower_rain(name)
