@@ -123,12 +123,14 @@ end)
 
 -- remove legacy cloud layer
 
-minetest.register_lbm({
+minetest.register_abm({
 	nodenames = {"default:cloud"},
-	name = "elidragon:remove_cloud_layer",
+	label = "elidragon:remove_cloud_layer",
+	interval = 1,
+	chance = 1,
 	action = function(pos)
 		if pos.y == -10 then
-			minetest.set_node(pos, { name = "air"})
+			minetest.remove_node(pos)
 		end
 	end
 })
